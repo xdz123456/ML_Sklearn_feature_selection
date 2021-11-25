@@ -7,11 +7,11 @@ from sklearn.linear_model import LogisticRegression
 
 # Load all the data from souse file
 # Get all the feature names
-feature_df = pd.read_csv("features.txt", header=None)
+feature_df = pd.read_csv("feature_names.csv", header=None)
 # Get the the data of features
-data_df = pd.read_csv("data.txt", header=None)
+data_df = pd.read_csv("data.csv", header=None)
 # Get all the labels
-labels_df = pd.read_csv("labels.txt", header=None)
+labels_df = pd.read_csv("labels.csv", header=None)
 
 
 # Mapping with index of the data set
