@@ -3,7 +3,13 @@ import csv
 from matplotlib import pyplot as plt
 from sklearn.feature_selection import VarianceThreshold
 from sklearn.feature_selection import RFE
+from sklearn.feature_selection import RFECV
+from sklearn.svm import SVR
 from sklearn.linear_model import LogisticRegression
+from sklearn.feature_selection import chi2
+from sklearn.feature_selection import SelectFromModel
+from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.feature_selection import SelectKBest
 
 
 def draw_figure(X, y, feature_names):
@@ -62,11 +68,33 @@ with open('feature_names.csv') as f:
     csv_reader = csv.reader(f, delimiter=',')
     feature_names = [row for row in csv_reader][0]
 
-#
+# #Filter Method
+
 # Feature Selection with variance
 data_with_variance = VarianceThreshold(threshold=3).fit_transform(X)
-# Wrapper
-# data_with_wrapper = RFE(estimator=LogisticRegression(), n_features_to_select=2).fit_transform(X, y)
+# K2
+data_with_c2 = SelectKBest(chi2, k=10).fit_transform(X, y)
+
+# Wrapping Method
+# RFE without
+RFE_estimator = SVR(kernel="linear")
+RFE_selector = RFE(RFE_estimator, n_features_to_select=5, step=1)
+RFE_selector = RFE_selector.fit(X, y)
+# RFE_with_CV without
+RFE_with_CV_estimator = SVR(kernel="linear")
+RFE_with_CV_selector = RFECV(RFE_with_CV_estimator, step=1, cv=5)
+RFE_with_CV_selector = RFE_with_CV_selector.fit(X, y)
+
+
+# #Embedded Method
+# Embedded Method with penalty
+data_with_model_LG =SelectFromModel(LogisticRegression(penalty="l2", C=0.1)).fit_transform(X, y)
+
+# GBDT作为基模型的特征选择
+data_with_model_Tree = SelectFromModel(GradientBoostingClassifier()).fit_transform(X, y)
+
+
+
 draw_figure(X, y, feature_names)
 
 
