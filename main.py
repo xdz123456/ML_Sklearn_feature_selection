@@ -62,6 +62,7 @@ with open('feature_names.csv') as f:
     csv_reader = csv.reader(f, delimiter=',')
     feature_names = [row for row in csv_reader][0]
 
+#
 # Feature Selection with variance
 data_with_variance = VarianceThreshold(threshold=3).fit_transform(X)
 # Wrapper
